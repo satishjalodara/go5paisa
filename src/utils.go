@@ -17,6 +17,6 @@ func parseResBody(resBody []byte, obj interface{}) {
 	var body responseBody
 	body.Body = obj
 	if err := json.Unmarshal(resBody, &body); err != nil {
-		log.Fatal("Error parsing JSON response: %v", err)
+		log.Fatal("Error parsing JSON response:", err)
 	}
 }

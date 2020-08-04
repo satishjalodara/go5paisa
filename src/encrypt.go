@@ -1,11 +1,13 @@
 package go5paisa
 
-import "crypto/aes"
-import "crypto/cipher"
-import "crypto/sha1"
-import "encoding/base64"
-import "golang.org/x/crypto/pbkdf2"
-import "bytes"
+import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/sha1"
+	"encoding/base64"
+	"golang.org/x/crypto/pbkdf2"
+)
 
 func pkcs7Pad(b []byte, blocksize int) []byte {
 	if blocksize <= 0 {
@@ -28,13 +30,13 @@ func encrypt(key string, plaintext string) string {
 	derivedKey := pbkdf2.Key([]byte(key), iv, 1000, 48, sha1.New)
 	newiv := derivedKey[0:16]
 	newkey := derivedKey[16:48]
-	plaintextBytes := pkcs7Pad([]byte(plaintext), 16)
+	plaintextBytes := pkcs7Pad([]byte(plaintext), aes.BlockSize)
 	block, err := aes.NewCipher(newkey)
 	if err != nil {
 		panic(err)
 	}
 	n := aes.BlockSize - (len(plaintext) % aes.BlockSize)
-	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
+	ciphertext := make([]byte, len(plaintext)+n*2)
 	mode := cipher.NewCBCEncrypter(block, newiv)
 	mode.CryptBlocks(ciphertext, plaintextBytes)
 	cipherstring := base64.StdEncoding.EncodeToString(ciphertext[:len(ciphertext)-n])

@@ -84,7 +84,6 @@ func Login(conf *AppConfig, email string, password string, dob string) (*Client,
 	encryptedEmail := encrypt(conf.config.EncryptionKey, email)
 	encryptedPassword := encrypt(conf.config.EncryptionKey, password)
 	encryptedDOB := encrypt(conf.config.EncryptionKey, dob)
-	log.Println(encryptedEmail)
 	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
 	if err != nil {
 		log.Fatal(err)
@@ -128,6 +127,5 @@ func Login(conf *AppConfig, email string, password string, dob string) (*Client,
 		connection: httpClient,
 		appConfig:  conf,
 	}
-
 	return client, nil
 }

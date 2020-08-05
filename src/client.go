@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	// "fmt"
+	"errors"
 	"golang.org/x/net/publicsuffix"
 	"io/ioutil"
-	"log"
+	// "log"
 	"net/http"
 	"net/http/cookiejar"
 	"time"
@@ -84,9 +85,10 @@ func Login(conf *AppConfig, email string, password string, dob string) (*Client,
 	encryptedEmail := encrypt(conf.config.EncryptionKey, email)
 	encryptedPassword := encrypt(conf.config.EncryptionKey, password)
 	encryptedDOB := encrypt(conf.config.EncryptionKey, dob)
+	var client *Client
 	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
 	if err != nil {
-		log.Fatal(err)
+		return client, err
 	}
 	httpClient := &http.Client{
 		Jar:     jar,
@@ -113,16 +115,19 @@ func Login(conf *AppConfig, email string, password string, dob string) (*Client,
 	jsonValue, _ := json.Marshal(loginDetails)
 	res, err := httpClient.Post(baseURL+loginRoute, contentType, bytes.NewBuffer(jsonValue))
 	if err != nil {
-		log.Fatal(err)
+		return client, err
 	}
 	defer res.Body.Close()
 	resBody, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return client, err
+	}
 	var b body
 	parseResBody(resBody, &b)
-	if b.ClientCode == "" {
-		log.Fatal(b.Message)
+	if b.ClientCode == "" || b.ClientCode == "INVALID CODE" {
+		return client, errors.New(b.Message)
 	}
-	client := &Client{
+	client = &Client{
 		clientCode: b.ClientCode,
 		connection: httpClient,
 		appConfig:  conf,

@@ -3,25 +3,24 @@ package go5paisa
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 )
 
 // Holding represents a single holding
 type Holding struct {
-	BseCode         int `json:"BseCode"`
-	CurrentPrice    int `json:"CurrentPrice"`
-	DPQty           int `json:"DPQty"`
-	Exchange        int `json:"Exch"`
-	ExchangeType    int `json:"ExchType"`
-	Name            int `json:"FullName"`
-	NseCode         int `json:"NseCode"`
-	POASigned       int `json:"POASigned"`
-	PoolQty         int `json:"PoolQty"`
-	Quantity        int `json:"Quantity"`
-	ScripMultiplier int `json:"ScripMultiplier"`
-	Symbol          int `json:"Symbol"`
+	BseCode         int     `json:"BseCode"`
+	CurrentPrice    float32 `json:"CurrentPrice"`
+	DPQty           int     `json:"DPQty"`
+	Exchange        string  `json:"Exch"`
+	ExchangeType    string  `json:"ExchType"`
+	Name            string  `json:"FullName"`
+	NseCode         int     `json:"NseCode"`
+	POASigned       string  `json:"POASigned"`
+	PoolQty         int     `json:"PoolQty"`
+	Quantity        int     `json:"Quantity"`
+	ScripMultiplier int     `json:"ScripMultiplier"`
+	Symbol          string  `json:"Symbol"`
 }
 
 // Data has all holdings for a user
@@ -43,20 +42,27 @@ func parsHoldingsResponse(resBody []byte, obj Holdings) {
 }
 
 // GetHoldings fetches holdings of the user
-func (c *Client) GetHoldings() {
+func (c *Client) GetHoldings() (Holdings, error) {
+	var holdings Holdings
 	c.appConfig.head.RequestCode = holdingsRequestCode
-	payload := genericPayloadBody{
+	payloadBody := genericPayloadBody{
 		ClientCode: c.clientCode,
+	}
+	payload := genericPayload{
+		Head: c.appConfig.head,
+		Body: payloadBody,
 	}
 	jsonValue, _ := json.Marshal(payload)
 	res, err := c.connection.Post(baseURL+holdingsRoute, contentType, bytes.NewBuffer(jsonValue))
 	if err != nil {
-		log.Fatal(err)
+		return holdings, err
 	}
 	defer res.Body.Close()
 	resBody, err := ioutil.ReadAll(res.Body)
-	fmt.Println(string(resBody))
-	var holdings Holdings
+	if err != nil {
+		return holdings, err
+	}
+
 	parseResBody(resBody, &holdings)
-	fmt.Println(holdings)
+	return holdings, nil
 }

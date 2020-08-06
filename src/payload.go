@@ -37,3 +37,13 @@ type genericPayload struct {
 type genericPayloadBody struct {
 	ClientCode string `json:"ClientCode"`
 }
+
+type orderStatusPayloadBody struct {
+	ClientCode string  `json:"ClientCode"`
+	OrdList    []Order `json:"OrdStatusReqList"`
+}
+
+type orderStatusPayload struct {
+	Head *payloadHead           `json:"head"`
+	Body orderStatusPayloadBody `json:"body"`
+}

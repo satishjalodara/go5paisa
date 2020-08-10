@@ -4,7 +4,7 @@ Golang SDK for 5paisa APIs natively written in VB .NET
 
 #### Documentation
 
-GoDoc at https://godoc.org/github.com/5paisa/go5paisa/src
+GoDoc at https://godoc.org/github.com/5paisa/go5paisa
 
 
 #### Features

@@ -20,7 +20,7 @@ package main
 
 import (
 	"fmt"
-	"go5paisa/src"
+	"github.com/5paisa/go5paisa"
 )
 
 func main() {

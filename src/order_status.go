@@ -7,8 +7,8 @@ import (
 	// "log"
 )
 
-// Order represents details of an order in the OrderBook
-type Order struct {
+// OrderForStatus represents details of an order in the OrderBook
+type OrderForStatus struct {
 	Exchange      string `json:"Exch"`
 	ExchangeType  string `json:"ExchType"`
 	ScripCode     int    `json:"ScripCode"`
@@ -36,7 +36,7 @@ type OrderResponse struct {
 
 // OrderStatusReqList contains a order status request list
 type OrderStatusReqList struct {
-	OrderStatusList []Order `json:"OrdStatusReqList"`
+	OrderStatusList []OrderForStatus `json:"OrdStatusReqList"`
 }
 
 // GetOrderStatus fetches order book of the user

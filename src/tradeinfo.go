@@ -12,7 +12,7 @@ type TradeResponseList struct {
 }
 
 type TradeInfoList struct {
-	TradeList []Order `json:"TradeDetailList"`
+	TradeList []OrderForStatus `json:"TradeDetailList"`
 }
 
 // GetTradeInformation fetches order book of the user

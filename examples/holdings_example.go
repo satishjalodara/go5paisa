@@ -1,23 +1,4 @@
-# 5paisa Golang SDK
-
-Golang SDK for 5paisa APIs natively written in VB .NET
-
-#### Documentation
-
-GoDoc at https://godoc.org/github.com/5paisa/go5paisa
-
-
-#### Features
-
--   Order placement, modification and cancellation
--   Fetching user info including holdings, positions, margin and order book.
--   Fetching order status and trade information.
-
-### Usage
-
-Get your API keys from https://www.5paisa.com/developerapi/apikeys
-
-```go
+// Example to fetch all holdings for a user
 package main
 
 import (
@@ -46,15 +27,3 @@ func main() {
 	}
 	fmt.Printf("%+v\n", holdings)
 }
-
-
-```
-
-Check out [examples](./examples) for more usage examples
-
-#### TODO
- - Write tests.
- - Update docs.
- - Add more examples.
-
-Feel free to contribute and open issues :)

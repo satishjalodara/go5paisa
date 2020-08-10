@@ -1,4 +1,4 @@
-module go5paisa
+module github.com/5paisa/go5paisa
 
 go 1.14
 
